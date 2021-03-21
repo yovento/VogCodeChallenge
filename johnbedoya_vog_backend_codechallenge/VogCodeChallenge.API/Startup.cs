@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +30,8 @@ namespace VogCodeChallenge.API
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-            services.AddDbContext<VogCodeChallengeDbContext>();
+            services.AddDbContext<VogCodeChallengeDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")
+              .Replace("{{DB_ENDPOINT}}", Configuration.GetValue<string>("DB_ENDPOINT"))));
 
             services.AddControllers();
         }
@@ -62,7 +64,11 @@ namespace VogCodeChallenge.API
             {
                 using (var _context = serviceScope.ServiceProvider.GetService<VogCodeChallengeDbContext>())
                 {
-                    DatabaseData.Initialize(_context);
+                    if (Configuration.GetValue<bool>("DB_MIGRATE") == true)
+                        _context.Database.Migrate();
+
+                    if (Configuration.GetValue<bool>("DB_INITIALIZE") == true)
+                        DatabaseData.Initialize(_context);
                 }
             }
         }

@@ -7,7 +7,8 @@ using VogCodeChallenge.Domain;
 namespace VogCodeChallenge.Repositories
 {
     public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
-    {   
+    {
+        public EmployeeRepository(VogCodeChallengeDbContext context) : base(context) { }
         public IEnumerable<Employee> GetAll()
         {
             return base.GetData();

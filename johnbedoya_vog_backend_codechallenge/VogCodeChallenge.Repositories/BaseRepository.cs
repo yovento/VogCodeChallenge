@@ -6,16 +6,16 @@ using VogCodeChallenge.Domain;
 
 namespace VogCodeChallenge.Repositories
 {
-    public class BaseRepository<T> where T : class
+    public class BaseRepository<T> : IRepository<T> where T : class
     {
-        protected IEnumerable<T> _exampleData;
-        protected VogCodeChallengeDbContext _dbContext = new VogCodeChallengeDbContext();
+        protected VogCodeChallengeDbContext _dbContext;
         protected DbSet<T> DbSet;
-
-        public BaseRepository()
+        public BaseRepository(VogCodeChallengeDbContext dbContext)
         {
+            _dbContext = dbContext;
             DbSet = _dbContext.Set<T>();
         }
+
         public IEnumerable<T> GetData()
         {   
             return DbSet;

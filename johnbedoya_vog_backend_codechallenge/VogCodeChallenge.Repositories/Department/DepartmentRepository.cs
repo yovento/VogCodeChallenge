@@ -7,7 +7,8 @@ using VogCodeChallenge.Domain;
 namespace VogCodeChallenge.Repositories
 {
     public class DepartmentRepository : BaseRepository<Department>, IDepartmentRepository
-    {   
+    {
+        public DepartmentRepository(VogCodeChallengeDbContext context) : base(context) { }
         public IEnumerable<Department> GetAll()
         {
             return base.GetData();
