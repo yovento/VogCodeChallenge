@@ -21,8 +21,6 @@ namespace VogCodeChallenge.Domain
         [MaxLength(100)]
         public string address { get; set; }
 
-        public Department department { get; set; }
-
         [Required]
         public int departmentId { get; set; }
     }
